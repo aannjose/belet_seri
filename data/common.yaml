@@ -1,0 +1,12 @@
+---
+belet_seri::folder: '/tmp/belet_seri'
+belet_seri::file_name: 'web_service.rb'
+belet_seri::port: '4567'
+belet_seri::url: 'localhost'
+belet_seri::paths: ['/usr/bin/', '/bin']
+belet_seri::system_user: 'belet_seri'
+belet_seri::system_group: 'belet_seri'
+belet_seri::database_name: 'belet_seri_db'
+belet_seri::database_user: 'belet_seri_user'
+belet_seri::database_pass: 'belet_seri_pass'
+

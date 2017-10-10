@@ -1,0 +1,72 @@
+<%- | String $app_path,
+      String $file_name,
+      String $system_group,
+      String $system_user,
+| -%>
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          Belet Seri web service
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Belet Seri web service
+# Description:       Control the Belet Seri web service
+### END INIT INFO
+
+# Source function library.
+. /lib/lsb/init-functions
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Sintra web service"
+NAME=belet_seri
+PIDPATH=/var/run/belet_seri
+PIDFILE=$PIDPATH/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+LOGDEST=/var/log/belet_seri/$NAME.log
+RUNUSER=<%= $system_user %>
+RUNGROUP=<%= $system_group %>
+
+DAEMON=<%= $app_path %>/<%= $file_name %>
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+case $1 in
+  start)
+    log_daemon_msg "Starting $DESC" "$NAME"
+    if ! [ -d "/var/run/belet_seri" ]; then
+      mkdir -p /var/run/belet_seri
+      chown $RUNUSER:$RUNGROUP /var/run/belet_seri
+    fi
+    if ! [ -d "/var/log/belet_seri" ]; then
+      mkdir -p /var/log/belet_seri
+      chown $RUNUSER:$RUNGROUP /var/log/belet_seri
+    fi
+    ulimit -n 8192
+    start-stop-daemon --start --quiet --user $RUNUSER --group $RUNGROUP --pidfile $PIDFILE \
+      --startas $DAEMON &
+    status=$?
+    log_end_msg $status
+    ;;
+  stop)
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    start-stop-daemon --stop --quiet --oknodo --pidfile $PIDPATH/*.pid
+    log_end_msg $?
+    kill `cat /var/run/belet_seri/web_service.pid`
+    rm -f $PIDPATH/*.pid
+    ;;
+  restart)
+    $0 stop && sleep 1 && $0 start
+    ;;
+  reload)
+      $0 stop && sleep 1 && $0 start
+      ;;
+  status)
+    status_of_proc $DAEMON "$DESC" "$NAME"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 2
+    ;;
+esac

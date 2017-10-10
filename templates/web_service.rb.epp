@@ -1,0 +1,73 @@
+<%- | String $port,
+      String $url,
+      String $database_host,
+      String $database_user,
+      String $database_pass,
+      String $database_name
+| -%>
+#!/usr/bin/ruby
+require 'sinatra'
+require 'json'
+require 'mysql2'
+
+set :run, true
+set :port, <%= $port %>
+set :bind, '<%= $url %>'
+
+db = Mysql2::Client.new(:host => '<%= $database_host %>',
+                        :username => '<%= $database_user %>',
+                        :password => '<%= $database_pass %>')
+db.select_db('<%= $database_name %>')
+
+get '/' do
+  content_type :json
+  {"service running" => true}.to_json
+end
+
+get '/names' do
+  content_type :json
+    output = {names: []}
+    begin
+      db.query( "SELECT name FROM names").each do |row|
+        output[:names] << row['name']
+      end
+    rescue Exception => e
+      return {names: [], error: e.message}.to_json
+    end
+    # returns the names
+    output.to_json
+end
+
+get '/names/*' do
+  content_type :json
+  search = params['splat'].first
+  escape_search = db.escape(search)
+  output = {names: []}
+  begin
+    db.query( "SELECT name FROM names WHERE name LIKE '%#{escape_search}%'").each do |row|
+      output[:names] << row['name']
+    end
+  rescue Exception => e
+    return {names: [], error: e.message}.to_json
+  end
+  # returns the names
+  output.to_json
+end
+
+get '/add/*' do
+  content_type :json
+  name = params['splat'].first
+  escape_name = db.escape(name)
+  begin
+     db.query("INSERT INTO names (name) VALUES ('#{escape_name}')")
+     return {added: true}.to_json
+  rescue Exception => e
+     return {added: false, error: e.message}.to_json
+  end
+end
+
+# This is so the service can kill sinatra, it hates to die...
+File.open('/var/run/belet_seri/web_service.pid', 'w') {|f| f.write Process.pid }
+
+
+
