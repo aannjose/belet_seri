@@ -78,6 +78,7 @@ class belet_seri (
     owner   => $belet_seri::system_user,
     group   => $belet_seri::system_group,
     require => File[$belet_seri::folder],
+    notify  => Mysql::Db[$belet_seri::database_name],
     source  => 'puppet:///modules/belet_seri/table_setup.sql',
   }
 

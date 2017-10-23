@@ -21,25 +21,28 @@ db.select_db('<%= $database_name %>')
 
 get '/' do
   content_type :json
+  response['Access-Control-Allow-Origin'] = '*'
   {"service running" => true}.to_json
 end
 
 get '/names' do
   content_type :json
-    output = {names: []}
-    begin
-      db.query( "SELECT name FROM names").each do |row|
-        output[:names] << row['name']
-      end
-    rescue Exception => e
-      return {names: [], error: e.message}.to_json
+  response['Access-Control-Allow-Origin'] = '*'
+  output = {names: []}
+  begin
+    db.query( "SELECT name FROM names").each do |row|
+      output[:names] << row['name']
     end
-    # returns the names
-    output.to_json
+  rescue Exception => e
+    return {names: [], error: e.message}.to_json
+  end
+  # returns the names
+  output.to_json
 end
 
 get '/names/*' do
   content_type :json
+  response['Access-Control-Allow-Origin'] = '*'
   search = params['splat'].first
   escape_search = db.escape(search)
   output = {names: []}
@@ -56,6 +59,7 @@ end
 
 get '/add/*' do
   content_type :json
+  response['Access-Control-Allow-Origin'] = '*'
   name = params['splat'].first
   escape_name = db.escape(name)
   begin
