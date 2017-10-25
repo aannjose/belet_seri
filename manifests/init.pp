@@ -1,8 +1,8 @@
 # belet_seri
 #
-# A description of what this class does
+# Installs and configures NGINX and MySQL for a simple web service
 #
-# @summary A short summary of the purpose of this class
+# Copyright 2017 Puppet Inc
 #
 # @example
 #   include belet_seri

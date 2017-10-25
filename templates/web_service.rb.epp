@@ -6,6 +6,7 @@
       String $database_name
 | -%>
 #!/usr/bin/ruby
+# Copyright 2017 Puppet Inc
 require 'sinatra'
 require 'json'
 require 'mysql2'

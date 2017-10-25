@@ -19,6 +19,23 @@ This module was created to facilitate the quick and easy setup for an App backen
 
 It's Free and Open Source, so you can use away and modify it all you like! Iy also installs free and open source stuff so no need to worry about that either. 
 
+We have a video to guide you through these steps and to explain more about the module: https://www.youtube.com/watch?v=whVHXnNKSwY
+
+## Setup
+
+### What belet_seri installs
+
+It will install the NGINX package and configure it
+
+It will install the Sinatra ruby gem as well as the MySQL ruby gem. These require a few development packages that will also be installed
+
+And finally it will install MySQL and create a single table in it. 
+
+
+### Setup Requirements 
+
+Run on Ubuntu 16.04. I didn't have time to add any other OSes
+
 ## Setup
 
 ### What belet_seri installs
