@@ -21,6 +21,8 @@ It's Free and Open Source, so you can use away and modify it all you like! Iy al
 
 We have a video to guide you through these steps and to explain more about the module: https://www.youtube.com/watch?v=whVHXnNKSwY
 
+I would recommend completing the Puppet Learning VM before using this, as it helps explain a few of the concepts: https://puppet.com/download-learning-vm
+
 ## Setup
 
 ### What belet_seri installs
@@ -88,7 +90,7 @@ Once you have the VM up and running and have the copy/paste working between your
     ```
 1. Now we need to add puppet to our PATH. So we do:
     ```
-    echo 'export PATH=$PATH:/opt/puppetlabs/bin/' >> .bashrc
+    echo 'export PATH=$PATH:/opt/puppetlabs/bin' >> .bashrc
     source .bashrc
     ```
 1. Next up we need to add puppet to our hosts file so as not confuse the poor thing. So open the hosts file with (**Pro-tip learn to use Vi before running this:** https://www.howtogeek.com/102468/a-beginners-guide-to-editing-text-files-with-vi/):
